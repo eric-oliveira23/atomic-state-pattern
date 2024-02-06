@@ -17,8 +17,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final DateTime _date = DateTime.now();
-  int incompleteTasks = 0;
-  int completeTasks = 0;
 
   @override
   void initState() {
@@ -243,9 +241,11 @@ class _HomePageState extends State<HomePage> {
             Visibility(
               visible: todo!.id != -1,
               child: TextButton(
-                onPressed: () {
-                  deleteTodo(todo!.id);
-                  Navigator.pop(context);
+                onPressed: () async {
+                  await deleteTodo(todo!.id);
+                  await fetchTasksData();
+
+                  context.mounted ? Navigator.pop(context) : null;
                 },
                 child: const Text("Delete"),
               ),
@@ -254,10 +254,5 @@ class _HomePageState extends State<HomePage> {
         );
       },
     );
-  }
-
-  Future<void> fetchTasksData() async {
-    completeTasks = completeTodosState.value.length;
-    incompleteTasks = incompleteTodosState.value.length;
   }
 }

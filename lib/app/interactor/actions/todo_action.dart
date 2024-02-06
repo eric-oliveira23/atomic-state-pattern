@@ -3,6 +3,17 @@ import 'package:supertodo/app/interactor/atoms/todo_state.dart';
 import 'package:supertodo/app/interactor/models/todo_model.dart';
 import 'package:supertodo/app/interactor/repositories/todo_repository.dart';
 
+int _incompleteTasks = 0;
+int get incompleteTasks => _incompleteTasks;
+
+int _completeTasks = 0;
+int get completeTasks => _completeTasks;
+
+Future<void> fetchTasksData() async {
+  _completeTasks = completeTodosState.value.length;
+  _incompleteTasks = incompleteTodosState.value.length;
+}
+
 Future<void> fetchTodos() async {
   final repository = injector.get<TodoRepository>();
   allTodosState.value = await repository.getAll();
